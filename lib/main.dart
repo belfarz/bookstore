@@ -1,3 +1,5 @@
+import 'package:bookstore/pages/addbooks.dart';
+import 'package:bookstore/pages/adminpage.dart';
 import 'package:bookstore/pages/authpage.dart';
 import 'package:bookstore/pages/homepage.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +23,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
        debugShowCheckedModeBanner: false,
     home: AuthPage(),
+    routes: {
+      "/homepage":(context) => const HomePage(),
+      "/adminpage":(context) => const AdminHomePage(),
+      "/addbooks":(context) => const AddBooks(),
+    },
     );
   }
 }

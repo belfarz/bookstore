@@ -1,18 +1,18 @@
 var categoryData = [
   {
-    "icon": "lib/assets/Icons/heart",
+    "icon": "lib/assets/heart.svg",
     "lebel": "Romance",
   },
   {
-    "icon": "lib/assets/Icons/plane",
+    "icon": "lib/assets/playe.svg",
     "lebel": "Travel",
   },
   {
-    "icon": "lib/assets/Icons/world",
+    "icon": "lib/assets/world.svg",
     "lebel": "Documentary",
   },
   {
-    "icon": "lib/assets/Icons/heart",
+    "icon": "lib/assets/heart.svg",
     "lebel": "Love Story",
   },
 ];

@@ -1,5 +1,6 @@
 import 'package:bookstore/components/catelog.dart';
 import 'package:bookstore/themes/colors.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:bookstore/model/data.dart';
 
@@ -12,6 +13,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  void signUserOut (){
+    FirebaseAuth.instance.signOut();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +37,7 @@ class _HomePageState extends State<HomePage> {
                   Navigator.pushNamed(context, "/cartPage");
                 },
                 icon: const Icon(Icons.shopping_cart)),
-            IconButton(onPressed: () {}, icon: const Icon(Icons.logout))
+            IconButton(onPressed: signUserOut, icon: const Icon(Icons.logout))
           ],
           centerTitle: true,
         ),
