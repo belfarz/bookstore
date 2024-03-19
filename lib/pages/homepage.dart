@@ -1,9 +1,12 @@
+import 'package:bookstore/components/booktile.dart';
 import 'package:bookstore/components/catelog.dart';
+import 'package:bookstore/controller/bookcontroller.dart';
+import 'package:bookstore/pages/bookdetailspage.dart';
 import 'package:bookstore/themes/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:bookstore/model/data.dart';
-
+import 'package:get/get.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,11 +17,15 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
-  void signUserOut (){
+  void signUserOut() {
     FirebaseAuth.instance.signOut();
   }
+
   @override
   Widget build(BuildContext context) {
+    BookController bookController = Get.put(BookController());
+    final books = bookController.books;
+
     return Scaffold(
         // backgroundColor: Colors.grey[300],
         appBar: AppBar(
@@ -46,22 +53,26 @@ class _HomePageState extends State<HomePage> {
             children: [
               Container(
                 padding:
-                    const EdgeInsets.symmetric(vertical: 30, horizontal: 10),
-                height: 400,
+                const EdgeInsets.symmetric(vertical: 30, horizontal: 10),
                 color: primaryColor,
                 child: Column(
                   children: [
-                    const Row(
+                    Row(
                       children: [
-                        Text(
-                          "welcome✌️",
-                          style: TextStyle(
-                              fontFamily: "Poppins",
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.white),
+                        GestureDetector(
+                          onTap: () {
+                            print(bookController.books);
+                          },
+                          child: const Text(
+                            "welcome✌️",
+                            style: TextStyle(
+                                fontFamily: "Poppins",
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white),
+                          ),
                         ),
-                        Text(
+                        const Text(
                           " user",
                           style: TextStyle(
                               fontFamily: "Poppins",
@@ -98,14 +109,14 @@ class _HomePageState extends State<HomePage> {
                       ),
                       child: Row(
                         children: [
-                          SizedBox(width: 20),
+                          const SizedBox(width: 20),
                           InkWell(
                             onTap: () {
                               // bookController.getAllBooks();
                             },
-                            child: Icon(Icons.search),
+                            child: const Icon(Icons.search),
                           ),
-                          SizedBox(width: 10),
+                          const SizedBox(width: 10),
                           Expanded(
                             child: TextFormField(
                               decoration: const InputDecoration(
@@ -134,22 +145,81 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 10,),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              children: categoryData
-                                  .map(
-                                    (e) => CategoryWidget(
-                                        iconPath: e["icon"]!,
-                                        btnName: e["lebel"]!),
-                                  )
-                                  .toList(),
-                            ),
-                          )
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: categoryData
+                            .map(
+                              (e) => CategoryWidget(
+                                  iconPath: e["icon"]!, btnName: e["lebel"]!),
+                            )
+                            .toList(),
+                      ),
+                    ),
                   ],
                 ),
-              )
+              ),
+              const SizedBox(height: 10),
+              const Row(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Text(
+                      "New Arrival",
+                      style: TextStyle(
+                          fontFamily: "Poppins",
+                          fontSize: 24,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.black),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              // Row(
+              //   children: [
+              //     Expanded(
+              //       child: Container(
+              //         height: 500,
+              //         child: ListView.builder(
+              //           scrollDirection: Axis.horizontal,
+              //           itemCount: books.length,
+              //           itemBuilder: (context, index) => FoodTile(
+              //             book : books[index],
+              //             onTap: (){
+
+              //             },
+              //           ),
+              //         ),
+              //       ),
+              //     ),
+              //   ],
+              // ),
+              SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Obx(
+                    () => Row(
+                      children: books
+                          .map(
+                            (e) => BookTile(
+                              book: e,
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => BookDetails(
+                                        book: e,
+                                      ),
+                                    ));
+                              },
+                            ),
+                          )
+                          .toList(),
+                    ),
+                  )),
             ],
           ),
         ));

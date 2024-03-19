@@ -42,6 +42,7 @@ dependencies:
   cloud_firestore: ^4.15.7
   firebase_storage: ^11.6.9
   provider:
+  get: ^4.6.1 
   # google_sign_in: ^6.2.1
   # http: ^0.13.3 
 
