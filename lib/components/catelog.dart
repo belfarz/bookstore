@@ -11,7 +11,7 @@ class CategoryWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(right: 10),
-      child: InkWell(
+      child: GestureDetector(
         onTap: () {},
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),

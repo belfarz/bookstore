@@ -110,7 +110,7 @@ class _AddBooksState extends State<AddBooks> {
       } catch (e) {
         print('Error uploading item: $e');
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             backgroundColor: Colors.red,
             content: Text('An error occurred. Please try again later.'),
           ),
@@ -118,7 +118,7 @@ class _AddBooksState extends State<AddBooks> {
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           backgroundColor: Colors.red,
           content: Text('Please provide all required information.'),
         ),
@@ -145,8 +145,8 @@ class _AddBooksState extends State<AddBooks> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Upload the Book Thumbnail', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              SizedBox(height: 25),
+              const Text('Upload the Book Thumbnail', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 25),
               selectedImage == null
                   ? GestureDetector(
                       onTap: getImage,

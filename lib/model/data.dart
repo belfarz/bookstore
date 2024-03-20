@@ -13,6 +13,23 @@ var categoryData = [
   },
   {
     "icon": "lib/assets/heart.svg",
-    "lebel": "Love Story",
+    "lebel": "Thriller",
+  },
+  {
+    "icon": "lib/assets/heart.svg",
+    "lebel": "Mystery",
+  },
+  {
+    "icon": "lib/assets/heart.svg",
+    "lebel": "Fantasy",
+  },
+  {
+    "icon": "lib/assets/heart.svg",
+    "lebel": "Fiction",
+  },
+  {
+    "icon": "lib/assets/heart.svg",
+    "lebel": "Manga",
   },
 ];
+
