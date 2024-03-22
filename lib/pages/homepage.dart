@@ -3,6 +3,7 @@ import 'package:bookstore/components/catelog.dart';
 import 'package:bookstore/components/searchtile.dart';
 import 'package:bookstore/controller/bookcontroller.dart';
 import 'package:bookstore/pages/bookdetailspage.dart';
+import 'package:bookstore/pages/categorypage.dart';
 import 'package:bookstore/themes/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -24,9 +25,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   List<Map<String, dynamic>> _searchList = [];
-   BookController bookController = Get.put(BookController());
-    
-    final TextEditingController searchController = TextEditingController();
+  BookController bookController = Get.put(BookController());
+
+  final TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
@@ -35,26 +36,32 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _runFilter(String keyword) {
-  List<Map<String, dynamic>> result = [];
-  final books = bookController.books.toList();
+    List<Map<String, dynamic>> result = [];
+    final books = bookController.books.toList();
+   
 
-  if (keyword.isEmpty) {
-    result = []; // If keyword is empty, return all books
-  } else {
-    result = books.where((book) =>
-        book["Name"].toString().toLowerCase().startsWith(keyword.toLowerCase())).toList();
-    // Filter books based on keyword
+    if (keyword.isEmpty) {
+      result = []; // If keyword is empty, return all books
+    } else {
+      result = books
+          .where((book) => book["Name"]
+              .toString()
+              .toLowerCase()
+              .startsWith(keyword.toLowerCase()))
+          .toList();
+      // Filter books based on keyword
+    }
+
+    // Update the state with the filtered result
+    setState(() {
+      _searchList = result;
+    });
   }
-
-  // Update the state with the filtered result
-  setState(() {
-    _searchList = result;
-  });
-}
 
   @override
   Widget build(BuildContext context) {
-   final books = bookController.books;
+    final books = bookController.books;
+     List<dynamic> newArrivval = books.reversed.toList();
     bool isSearchTextNotEmpty = false;
 
     return Scaffold(
@@ -63,8 +70,11 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: primaryColor,
           foregroundColor: Colors.white,
           elevation: 0,
-          leading: const Icon(
-            Icons.menu,
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pushNamed(context, "/profile");
+            },
+            icon: Icon(Icons.person), // Wrap Icons.person with Icon widget
           ),
           title: const Text(
             "BookShop",
@@ -166,55 +176,65 @@ class _HomePageState extends State<HomePage> {
                     const SizedBox(
                       height: 20,
                     ),
-                    // const Row(
-                    //   children: [
-                    //     Text(
-                    //       "Topics",
-                    //       style: TextStyle(
-                    //           fontFamily: "Poppins",
-                    //           fontSize: 15,
-                    //           fontWeight: FontWeight.w400,
-                    //           color: Colors.white),
-                    //     ),
-                    //   ],
-                    // ),
-                    // const SizedBox(
-                    //   height: 10,
-                    // ),
-                    // SingleChildScrollView(
-                    //   scrollDirection: Axis.horizontal,
-                    //   child: Row(
-                    //     children: categoryData
-                    //         .map(
-                    //           (e) => CategoryWidget(
-                    //               iconPath: e["icon"]!, btnName: e["lebel"]!),
-                    //         )
-                    //         .toList(),
-                    //   ),
-                    // ),
-
-                   SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child:  Row(
-                      children: _searchList
-                          .map(
-                            (e) => BookTile(
-                              book: e,
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => BookDetails(
-                                        book: e,
-                                      ),
-                                    ));
-                              },
-                            ),
-                          )
-                          .toList(),
+                    const Row(
+                      children: [
+                        Text(
+                          "Topics",
+                          style: TextStyle(
+                              fontFamily: "Poppins",
+                              fontSize: 15,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.white),
+                        ),
+                      ],
                     ),
-                  ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: categoryData
+                            .map(
+                              (e) => CategoryWidget(
+                                  iconPath: e["icon"]!,
+                                   btnName: e["lebel"]!,
+                                   onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => CategoryPage(
+                                          category: e["lebel"].toString(),
+                                        ),
+                                      ));
+                                },
+                                   ),
+                            )
+                            .toList(),
+                      ),
+                    ),
 
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: _searchList
+                            .map(
+                              (e) => BookTile(
+                                book: e,
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => BookDetails(
+                                          book: e,
+                                        ),
+                                      ));
+                                },
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -246,7 +266,7 @@ class _HomePageState extends State<HomePage> {
               //           itemBuilder: (context, index) => FoodTile(
               //             book : books[index],
               //             onTap: (){
-          
+
               //             },
               //           ),
               //         ),
@@ -254,6 +274,45 @@ class _HomePageState extends State<HomePage> {
               //     ),
               //   ],
               // ),
+              
+              SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                      children: newArrivval
+                          .map(
+                            (e) => BookTile(
+                              book: e,
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => BookDetails(
+                                        book: e,
+                                      ),
+                                    ));
+                              },
+                            ),
+                          )
+                          .toList(),
+                    ),
+                  ),
+
+                   const Row(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Text(
+                      "Best Sellers",
+                      style: TextStyle(
+                          fontFamily: "Poppins",
+                          fontSize: 24,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.black),
+                    ),
+                  ),
+                ],
+              ),
+
               SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Obx(
@@ -275,7 +334,8 @@ class _HomePageState extends State<HomePage> {
                           )
                           .toList(),
                     ),
-                  )),
+                  )
+                  ),
             ],
           ),
         ));

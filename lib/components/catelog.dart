@@ -2,17 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class CategoryWidget extends StatelessWidget {
+  final void Function()? onTap;
   final String iconPath;
   final String btnName;
   const CategoryWidget(
-      {super.key, required this.iconPath, required this.btnName});
+      {super.key, required this.iconPath, required this.btnName, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(right: 10),
       child: GestureDetector(
-        onTap: () {},
+        onTap: onTap,
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
           decoration: BoxDecoration(

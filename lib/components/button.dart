@@ -1,3 +1,4 @@
+import 'package:bookstore/themes/colors.dart';
 import 'package:flutter/material.dart';
 
 class MyButton extends StatelessWidget {
@@ -8,9 +9,11 @@ class MyButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap ,
+      onTap: onTap,
       child: Container(
-        decoration: BoxDecoration(color: Color.fromARGB(212, 162, 180, 135),borderRadius: BorderRadius.circular(40)),
+        decoration: BoxDecoration(
+            color: primaryColor,
+            borderRadius: BorderRadius.circular(40)),
         padding: EdgeInsets.all(20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -18,8 +21,10 @@ class MyButton extends StatelessWidget {
             Text(
               text,
               style: TextStyle(color: Colors.white),
-              ),
-            const SizedBox(width: 10,),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
             Icon(
               Icons.arrow_forward,
               color: Colors.white,

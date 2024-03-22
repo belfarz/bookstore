@@ -4,6 +4,7 @@ import 'package:bookstore/pages/adminpage.dart';
 import 'package:bookstore/pages/authpage.dart';
 import 'package:bookstore/pages/cartpage.dart';
 import 'package:bookstore/pages/homepage.dart';
+import 'package:bookstore/pages/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
       "/adminpage":(context) => const AdminHomePage(),
       "/addbooks":(context) => const AddBooks(),
       "/cartPage":(context) => const CartPage(),
+      "/profile":(context) =>  ProfilePage(),
     },
     );
   }
