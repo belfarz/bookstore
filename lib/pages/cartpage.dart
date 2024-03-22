@@ -3,7 +3,6 @@ import 'package:bookstore/components/quantityselector.dart';
 import 'package:bookstore/model/shop.dart';
 import 'package:bookstore/themes/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 class CartPage extends StatefulWidget {

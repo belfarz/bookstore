@@ -1,3 +1,4 @@
+import 'package:bookstore/pages/authpage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -26,32 +27,37 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> _loadUserProfile() async {
-  User? user = FirebaseAuth.instance.currentUser;
-  if (user != null) {
-    // Fetch address data from Firestore
-    DocumentSnapshot<Map<String, dynamic>> addressSnapshot =
-        await FirebaseFirestore.instance
-            .collection('addresses')
-            .doc(user.uid)
-            .get();
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      // Fetch address data from Firestore
+      DocumentSnapshot<Map<String, dynamic>> addressSnapshot =
+          await FirebaseFirestore.instance
+              .collection('addresses')
+              .doc(user.uid)
+              .get();
 
-    if (addressSnapshot.exists) {
+      if (addressSnapshot.exists) {
+        setState(() {
+          _address = addressSnapshot.data()?['address'];
+        });
+      }
+
+      // Update display name
+      await user.reload();
       setState(() {
-        _address = addressSnapshot.data()?['address'];
+        _displayName = user.displayName;
+        _editingName = _displayName == null;
       });
     }
-
-    // Update display name
-    await user.reload();
-    setState(() {
-      _displayName = user.displayName;
-      _editingName = _displayName == null;
-    });
   }
-}
 
-void signUserOut() {
+  void signUserOut() {
     FirebaseAuth.instance.signOut();
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const AuthPage(),
+        ));
   }
 
   @override
@@ -63,8 +69,8 @@ void signUserOut() {
         centerTitle: true,
         title: Text('Profile'),
         actions: [
-            IconButton(onPressed: signUserOut, icon: const Icon(Icons.logout))
-          ],
+          IconButton(onPressed: signUserOut, icon: const Icon(Icons.logout))
+        ],
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -97,12 +103,11 @@ void signUserOut() {
                   _displayName ?? '',
                   style: TextStyle(fontSize: 20),
                 ),
-                if (_address != null)
-                SizedBox(height: 20),
-                Text(
-                  'Shipping Address: $_address',
-                  style: TextStyle(fontSize: 20),
-                ),
+              if (_address != null) SizedBox(height: 20),
+              Text(
+                'Shipping Address: $_address',
+                style: TextStyle(fontSize: 20),
+              ),
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
@@ -139,16 +144,13 @@ void signUserOut() {
                       SizedBox(height: 10),
                       ElevatedButton(
                         onPressed: () {
-                          
-                            updateUserAddress(userId, _addressController.text);
-                          
+                          updateUserAddress(userId, _addressController.text);
                         },
                         child: Text('Save Address'),
                       ),
                     ],
                   ),
                 ),
-              
               SizedBox(height: 20),
               if (!_changingPassword)
                 ElevatedButton(
@@ -235,55 +237,54 @@ void signUserOut() {
   }
 
   // Function to retrieve current user ID from Firebase Authentication
-Future<String?> getCurrentUserId() async {
-  User? user = FirebaseAuth.instance.currentUser;
-  if (user != null) {
-    return user.uid;
-  } else {
-    // If user is not signed in, return null
-    return null;
+  Future<String?> getCurrentUserId() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      return user.uid;
+    } else {
+      // If user is not signed in, return null
+      return null;
+    }
   }
-}
 
 // Function to update user's address in Firestore
-Future<void> updateUserAddress(String? userId, String newAddress) async {
-  String? userId = await getCurrentUserId();
-  try {
-    // Get a reference to the "addresses" collection
-    CollectionReference addressesCollection =
-        FirebaseFirestore.instance.collection('addresses');
+  Future<void> updateUserAddress(String? userId, String newAddress) async {
+    String? userId = await getCurrentUserId();
+    try {
+      // Get a reference to the "addresses" collection
+      CollectionReference addressesCollection =
+          FirebaseFirestore.instance.collection('addresses');
 
-    // Check if the document exists for the user ID
-    DocumentReference userAddressDocRef =
-        addressesCollection.doc(userId);
+      // Check if the document exists for the user ID
+      DocumentReference userAddressDocRef = addressesCollection.doc(userId);
 
-    if (!(await userAddressDocRef.get()).exists) {
-      // If the document doesn't exist, create it with the address
-      await userAddressDocRef.set({'address': newAddress});
-    } else {
-      // If the document exists, update the address
-      await userAddressDocRef.update({'address': newAddress});
+      if (!(await userAddressDocRef.get()).exists) {
+        // If the document doesn't exist, create it with the address
+        await userAddressDocRef.set({'address': newAddress});
+      } else {
+        // If the document exists, update the address
+        await userAddressDocRef.update({'address': newAddress});
+      }
+
+      print('Address updated successfully');
+    } catch (e) {
+      print('Error updating address: $e');
     }
-
-    print('Address updated successfully');
-  } catch (e) {
-    print('Error updating address: $e');
   }
-}
 
 // Function to update current user's address
-Future<void> updateCurrentUserAddress(String newAddress) async {
-  // Get current user's ID
-  String? userId = await getCurrentUserId();
+  Future<void> updateCurrentUserAddress(String newAddress) async {
+    // Get current user's ID
+    String? userId = await getCurrentUserId();
 
-  if (userId != null) {
-    // If user ID is available, update the address
-    await updateUserAddress(userId, newAddress);
-  } else {
-    // Handle case where user is not signed in
-    print('User is not signed in');
+    if (userId != null) {
+      // If user ID is available, update the address
+      await updateUserAddress(userId, newAddress);
+    } else {
+      // Handle case where user is not signed in
+      print('User is not signed in');
+    }
   }
-}
 
   @override
   void dispose() {

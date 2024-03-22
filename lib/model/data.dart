@@ -5,7 +5,7 @@ var categoryData = [
   },
   {
     "icon": "lib/assets/playe.svg",
-    "lebel": "Travel",
+    "lebel": "True Crime",
   },
   {
     "icon": "lib/assets/world.svg",

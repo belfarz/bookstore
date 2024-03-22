@@ -1,15 +1,11 @@
 import 'package:bookstore/components/booktile.dart';
 import 'package:bookstore/components/catelog.dart';
-import 'package:bookstore/components/searchtile.dart';
 import 'package:bookstore/controller/bookcontroller.dart';
 import 'package:bookstore/pages/bookdetailspage.dart';
 import 'package:bookstore/pages/categorypage.dart';
 import 'package:bookstore/themes/colors.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bookstore/model/data.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 class HomePage extends StatefulWidget {
@@ -20,9 +16,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  void signUserOut() {
-    FirebaseAuth.instance.signOut();
-  }
+  
 
   List<Map<String, dynamic>> _searchList = [];
   BookController bookController = Get.put(BookController());
@@ -31,7 +25,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    _searchList = bookController.books.toList();
+    _searchList = [];
     super.initState();
   }
 
@@ -62,7 +56,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final books = bookController.books;
      List<dynamic> newArrivval = books.reversed.toList();
-    bool isSearchTextNotEmpty = false;
 
     return Scaffold(
         // backgroundColor: Colors.grey[300],
@@ -85,7 +78,6 @@ class _HomePageState extends State<HomePage> {
                   Navigator.pushNamed(context, "/cartPage");
                 },
                 icon: const Icon(Icons.shopping_cart)),
-            IconButton(onPressed: signUserOut, icon: const Icon(Icons.logout))
           ],
           centerTitle: true,
         ),
