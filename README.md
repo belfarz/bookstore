@@ -140,7 +140,7 @@ Installation Steps
 
 Clone the repository:
 
-git clone https://github.com/smokemoha/bookstore-app.git
+git clone https://github.com/username/bookstore-app.git
 
 Navigate to the project directory:
 
